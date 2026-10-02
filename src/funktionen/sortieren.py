@@ -1,14 +1,18 @@
 from typing import List
 
 def insertion_sort(lst: List[int]) -> List[int]:
-    result = lst.copy()
-    for i in range(1, len(result)):
-        key = result[i]
-        j = i - 1
-        while j >= 0 and result[j] > key:
-            result[j + 1] = result[j]
-            j -= 1
-        result[j + 1] = key
+    result: List[int] = []
+
+    for value in lst:
+        inserted = False
+        for index in range(len(result)):
+            if value < result[index]:
+                result.insert(index, value)
+                inserted = True
+                break
+        if not inserted:
+            result.append(value)
+
     return result
 
 def selection_sort(lst: List[int]) -> List[int]:
@@ -33,20 +37,22 @@ def bubble_sort(lst: List[int]) -> List[int]:
 def merge_sort(lst: List[int]) -> List[int]:
     if len(lst) <= 1:
         return lst.copy()
-    def _merge(left: List[int], right: List[int]) -> List[int]:
-        merged = []
-        i = j = 0
-        while i < len(left) and j < len(right):
-            if left[i] < right[j]:
-                merged.append(left[i])
-                i += 1
-            else:
-                merged.append(right[j])
-                j += 1
-        merged.extend(left[i:])
-        merged.extend(right[j:])
-        return merged
+    
     mid = len(lst) // 2
     left = merge_sort(lst[:mid])
     right = merge_sort(lst[mid:])
-    return _merge(left, right)
+    return merge(left, right)
+
+def merge(left: List[int], right: List[int]) -> List[int]:
+    merged = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            merged.append(left[i])
+            i += 1
+        else:
+            merged.append(right[j])
+            j += 1
+    merged.extend(left[i:])
+    merged.extend(right[j:])
+    return merged
